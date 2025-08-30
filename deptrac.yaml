@@ -1,0 +1,33 @@
+deptrac:
+  paths:
+    - ./src
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          value: 'src/.*/Domain/.*'
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: 'src/.*/Infrastructure/.*'
+    - name: Presentation
+      collectors:
+        - type: directory
+          value: 'src/.*/Presentation/.*'
+    - name: Vendors
+      collectors:
+        - type: classNameRegex
+          value: '#^(?!Rates).*#'
+  ruleset:
+    Domain:
+      - Domain
+      - Vendors
+      - Infrastructure
+    Infrastructure:
+      - Vendors
+      - Infrastructure
+    Presentation:
+      - Domain
+      - Vendors
+      - Presentation
+      - Infrastructure

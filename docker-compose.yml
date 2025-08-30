@@ -1,0 +1,47 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: devops/php.dockerfile
+      args:
+        CONTEXT_ENV: dev
+    command: ["roadrunner", "serve", "-c", ".rr.dev.yaml", "--debug"]
+    container_name: crypto-rates-php
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/application
+      - ./var/cache:/application/var/cache
+      - ./var/log:/application/var/log
+    environment:
+      - PHP_IDE_CONFIG=serverName=crypto-rates
+      - XDEBUG_CONFIG=client_host=host.docker.internal
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - crypto-rates
+
+  mysql:
+    image: mysql:8.0
+    container_name: crypto-rates-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: crypto_rates
+      MYSQL_USER: crypto_rates
+      MYSQL_PASSWORD: crypto_rates_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./devops/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - crypto-rates
+
+volumes:
+  mysql_data:
+
+networks:
+  crypto-rates:
+    driver: bridge

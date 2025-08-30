@@ -1,0 +1,125 @@
+{
+    "name": "crypto-rates/api",
+    "description": "Crypto rates API service",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.4",
+        "ext-decimal": "*",
+        "baldinof/roadrunner-bundle": "^3.2",
+        "doctrine/doctrine-bundle": "^2.15",
+        "doctrine/doctrine-migrations-bundle": "^3.4",
+        "doctrine/orm": "^3.5",
+        "guzzlehttp/guzzle": "^7.10",
+        "nyholm/psr7": "^1.8",
+        "ramsey/uuid": "4.9",
+        "ramsey/uuid-doctrine": "^2.1",
+        "spiral/goridge": "^4.0",
+        "spiral/roadrunner-http": "^3.0",
+        "symfony/config": "^7.3",
+        "symfony/console": "^7.3",
+        "symfony/dependency-injection": "^7.3",
+        "symfony/dotenv": "^7.3",
+        "symfony/flex": "^2.0",
+        "symfony/framework-bundle": "^7.3",
+        "symfony/http-foundation": "^7.3",
+        "symfony/http-kernel": "^7.3",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/property-access": "^7.3",
+        "symfony/property-info": "^7.3",
+        "symfony/routing": "^7.3",
+        "symfony/runtime": "^7.3",
+        "symfony/serializer": "^7.3",
+        "symfony/uid": "7.3.*",
+        "symfony/validator": "^7.3",
+        "symfony/yaml": "^7.3"
+    },
+    "require-dev": {
+        "deptrac/deptrac": "^3.0",
+        "fakerphp/faker": "^1.24",
+        "phpmd/phpmd": "^2.15",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpunit": "^10.0",
+        "symfony/browser-kit": "^7.3",
+        "symfony/phpunit-bridge": "^7.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Rates\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rates\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*",
+        "symfony/polyfill-php83": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "analyze:run": [
+            "php vendor/bin/phpstan analyse --memory-limit=2G"
+        ],
+        "deptrac:run": [
+            "php vendor/bin/deptrac -c deptrac.yaml --no-cache --report-uncovered --fail-on-uncovered",
+            "php vendor/bin/deptrac -c deptrac-domains.yaml --no-cache --report-uncovered --fail-on-uncovered"
+        ],
+        "tests:setup": [
+            "APP_ENV=test bin/console cache:clear",
+            "APP_ENV=test bin/console doctrine:migrations:migrate --no-interaction"
+        ],
+        "tests:run": [
+            "vendor/bin/phpunit"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "runtime": {
+            "dotenv_overload": true
+        },
+        "symfony": {
+            "allow-contrib": false,
+            "require": "7.3.*"
+        },
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    }
+}

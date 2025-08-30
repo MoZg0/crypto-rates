@@ -1,0 +1,84 @@
+version: "3"
+
+server:
+  command: "php public/index.php"
+  relay: pipes
+  env:
+    APP_RUNTIME: Baldinof\RoadRunnerBundle\Runtime\Runtime
+    APP_ENV: prod
+    APP_DEBUG: "false"
+
+http:
+  address: 0.0.0.0:8080
+  middleware: ["gzip", "static", "headers"]
+
+  headers:
+    response:
+      X-Powered-By: "RoadRunner"
+      X-Frame-Options: "DENY"
+      X-Content-Type-Options: "nosniff"
+      X-XSS-Protection: "1; mode=block"
+
+  # Static files optimization
+  static:
+    dir: "public"
+    forbid: [".php", ".htaccess", ".env", ".git"]
+    request:
+      input: 32  # Megabytes
+    response:
+      output: 32  # Megabytes
+
+  # File uploads restrictions
+  uploads:
+    forbid: [".php", ".exe", ".bat", ".cmd", ".sh"]
+
+  # Production-optimized pool configuration
+  pool:
+    # Auto-detect CPU count (0 = number of logical CPUs)
+    # For IO-bound apps, can be 2-4x CPU count
+    # For CPU-bound apps, use CPU count
+    num_workers: 0  # Will be auto-detected
+
+    # Restart workers after processing this many jobs (prevents memory leaks)
+    max_jobs: 10000
+
+    # Queue size limit (prevents memory exhaustion)
+    max_queue_size: 1000
+
+    # Timeouts
+    allocate_timeout: 60s
+    reset_timeout: 60s
+    destroy_timeout: 60s
+
+    # Supervisor configuration for monitoring workers
+    supervisor:
+      # Check worker state every 10s
+      watch_tick: 10s
+
+      # Worker lifetime limits (soft limits)
+      ttl: 3600s  # 1 hour max worker lifetime
+      idle_ttl: 600s  # 10 minutes idle before restart
+
+      # Memory limit per worker (MB) - set 10-20% below system memory limit
+      max_worker_memory: 512
+
+      # Hard limit for single request execution
+      exec_ttl: 300s  # 5 minutes max per request
+
+# Roadrunner healthcheck
+status:
+  path: "127.0.0.1:2114"
+  unavailable_status_code: 500
+
+logs:
+  mode: production
+  level: warn
+  encoding: json
+  file_logger_options:
+    log_output: "/dev/stderr"
+    max_size: 200
+    max_age: 30
+    max_backups: 10
+
+metrics:
+  address: "127.0.0.1:2112"

@@ -1,0 +1,23 @@
+deptrac:
+  paths:
+    - ./src
+  layers:
+    - name: Common
+      collectors:
+        - type: directory
+          value: 'src/Common/.*'
+    - name: Crypto
+      collectors:
+        - type: directory
+          value: 'src/Crypto/.*'
+    - name: Vendors
+      collectors:
+        - type: classNameRegex
+          value: '#^(?!Rates).*#'
+  ruleset:
+    Crypto:
+      - Vendors
+      - Common
+    Common:
+      - Vendors
+      - Common
