@@ -22,10 +22,10 @@ help:
 
 up: ## Start local containers (detached)
 	@if [ ! -f vendor/autoload.php ]; then \
-    		echo "[make up] vendor/ is missing, running composer install in container..."; \
-    		$(DC) run --rm $(PHP_SVC) composer install --no-interaction --prefer-dist --no-scripts --no-ansi --no-progress; \
-    	fi && \
-    $(DC) up -d
+    	echo "[make up] vendor/ is missing, running composer install on host..."; \
+        composer install --no-interaction --prefer-dist --no-scripts --no-ansi --no-progress --ignore-platform-reqs; \
+	fi
+	$(DC) up -d
 
 build: ## Build images
 	$(DC) build
