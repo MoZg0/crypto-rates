@@ -12,7 +12,7 @@ use Rates\Crypto\Infrastructure\Persistence\Repositories\RateRepository;
 
 class RateService
 {
-    private const int DEFAULT_CHUCK_SIZE = 100;
+    private const int DEFAULT_CHUNK_SIZE = 100;
 
     public function __construct(
         private readonly ApiAdapter $apiAdapter,
@@ -25,10 +25,10 @@ class RateService
     /**
      * @param list<string> $pairs
      */
-    public function fetchRates(array $pairs, int $chunkSize = self::DEFAULT_CHUCK_SIZE): void
+    public function fetchRates(array $pairs, int $chunkSize = self::DEFAULT_CHUNK_SIZE): void
     {
         if ($chunkSize < 1) {
-            $chunkSize = self::DEFAULT_CHUCK_SIZE;
+            $chunkSize = self::DEFAULT_CHUNK_SIZE;
         }
 
         /** @var list<list<string>> $chunks */

@@ -10,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class GetRateFilter
 {
-    private ?string $id = null {
+    public ?string $id = null {
         get {
             return $this->id;
         }
@@ -28,7 +28,7 @@ class GetRateFilter
         }
     }
 
-    private ?Decimal $priceFrom = null {
+    public ?Decimal $priceFrom = null {
         get {
             return $this->priceFrom;
         }
@@ -37,7 +37,7 @@ class GetRateFilter
         }
     }
 
-    private ?Decimal $priceTo = null {
+    public ?Decimal $priceTo = null {
         get {
             return $this->priceTo;
         }
