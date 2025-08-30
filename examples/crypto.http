@@ -1,0 +1,7 @@
+### GET last 24h rates
+GET {{host}}/api/rates/last-24h?pair=BTCEUR
+Accept: application/json
+
+### GET last day rates
+GET {{host}}/api/rates/day?pair=BTCEUR&date=2025-08-29
+Accept: application/json

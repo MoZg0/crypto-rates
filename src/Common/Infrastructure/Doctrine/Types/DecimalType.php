@@ -24,6 +24,10 @@ class DecimalType extends Type
             return null;
         }
 
+        if (!is_string($value) && !is_int($value) && !is_float($value)) {
+            throw new InvalidArgumentException('Expected numeric-string|int|float, got ' . get_debug_type($value));
+        }
+
         return new Decimal((string) $value);
     }
 

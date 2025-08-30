@@ -8,26 +8,19 @@ RUN apk add --no-cache --virtual .build-deps \
     git \
     curl \
     libzip-dev \
-    mpdecimal-dev \
     oniguruma-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
+    mpdecimal-dev \
     icu-dev \
     linux-headers \
     bash \
-    mysql-client \
     $PHPIZE_DEPS
 
 RUN docker-php-ext-install -j"$(nproc)" \
     pdo \
     pdo_mysql \
-    mysqli \
     zip \
     mbstring \
     exif \
-    pcntl \
-    bcmath \
     intl \
     opcache \
     sockets
@@ -63,13 +56,9 @@ ARG CONTEXT_ENV=dev
 RUN apk add --no-cache \
     bash \
     icu-libs \
-    libjpeg-turbo \
-    libpng \
-    freetype \
     mpdecimal \
     libzip \
     oniguruma \
-    mysql-client \
     curl \
  && rm -rf /var/cache/apk/*
 
@@ -80,6 +69,9 @@ COPY --from=build /usr/local/bin/composer /usr/local/bin/composer
 
 WORKDIR /application
 COPY --from=build /application /application
+
+RUN set -eux; \
+    install -d -m 0775 -o www-data -g www-data /application/var /application/var/cache /application/var/log
 
 COPY --from=build /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=build /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
@@ -101,8 +93,7 @@ RUN if [ "$CONTEXT_ENV" != "dev" ]; then \
       cp /usr/local/etc/php/conf.available/xdebug.ini /usr/local/etc/php/conf.d/zz-xdebug.ini; \
     fi
 
-RUN chown -R www-data:www-data /application/var \
- && rm -rf /root/.composer /root/.pearrc /tmp/*
+RUN rm -rf /root/.composer /root/.pearrc /tmp/*
 
 USER www-data
 

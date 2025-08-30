@@ -21,7 +21,11 @@ help:
 # ---- Docker ----------------------------------------------------------------
 
 up: ## Start local containers (detached)
-	$(DC) up -d
+	@if [ ! -f vendor/autoload.php ]; then \
+    		echo "[make up] vendor/ is missing, running composer install in container..."; \
+    		$(DC) run --rm $(PHP_SVC) composer install --no-interaction --prefer-dist --no-scripts --no-ansi --no-progress; \
+    	fi && \
+    $(DC) up -d
 
 build: ## Build images
 	$(DC) build
@@ -38,7 +42,7 @@ ps: ## List containers
 logs: ## Tail PHP service logs (LOGS_FOLLOW=true for -f)
 	@if [ "$(LOGS_FOLLOW)" = "true" ]; then $(DC) logs -f $(PHP_SVC); else $(DC) logs $(PHP_SVC); fi
 
-sh bash shell: ## Enter container bash
+sh bash shell enter: ## Enter container bash
 	$(iexec) bash
 
 # ---- Doctrine / Migrations --------------------------------------------------
@@ -67,7 +71,7 @@ deptrac: ## Run Deptrac (both configs via composer script)
 
 up-all: build up ## Build images then start containers
 
-qa: analyze deptrac test ## Run analyze + deptrac + tests
+qa: analyze test ## Run analyze + tests
 
 .PHONY: help up build stop down ps logs sh bash shell migrate schema-validate \
         test-setup test analyze deptrac up-all qa

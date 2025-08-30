@@ -5,12 +5,14 @@ services:
       dockerfile: devops/php.dockerfile
       args:
         CONTEXT_ENV: dev
+    working_dir: /application
     command: ["roadrunner", "serve", "-c", ".rr.dev.yaml", "--debug"]
     container_name: crypto-rates-php
     ports:
       - "8080:8080"
     volumes:
       - .:/application
+      - ./vendor:/application/vendor
       - ./var/cache:/application/var/cache
       - ./var/log:/application/var/log
     environment:

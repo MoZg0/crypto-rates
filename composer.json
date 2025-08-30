@@ -47,6 +47,7 @@
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^10.0",
+        "roave/security-advisories": "dev-latest",
         "symfony/browser-kit": "^7.3",
         "symfony/phpunit-bridge": "^7.3"
     },

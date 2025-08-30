@@ -1,0 +1,9 @@
+api_rates_last_24h:
+    path: /api/rates/last-24h
+    controller: Rates\Crypto\Presentation\Http\PublicV1\Controllers\RateController::getLast24h
+    methods: GET
+
+api_rates_day:
+    path: /api/rates/day
+    controller: Rates\Crypto\Presentation\Http\PublicV1\Controllers\RateController::getDay
+    methods: GET
