@@ -59,6 +59,7 @@ test-setup: ## Prepare test env (cache + migrations)
 	$(exec) bash -lc "composer tests:setup"
 
 test: ## Run tests
+	$(test-setup)
 	$(exec) bash -lc "composer tests:run"
 
 analyze: ## Run static analysis (composer analyze:run)
